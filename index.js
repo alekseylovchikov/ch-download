@@ -54,7 +54,7 @@ process.argv.forEach(function (val, index, array) {
                     progress(request(video.url), { throttle: 2000, delay: 1000 })
                         .on('progress', function(state) {
                             console.log(`\nDownload video: ${video.name}...`.blue);
-                            console.log('Percent:', `${state.percent.toFixed(2)}% downloaded\n`.blue);
+                            console.log('Progress:', `${state.percent}\n`.blue);
                         })
                         .on('error', function(err) {
                             console.log(`${err}`.red);
