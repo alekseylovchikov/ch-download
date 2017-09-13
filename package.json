@@ -11,8 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "cheerio": "latest",
+    "colors": "^1.1.2",
     "download": "^6.2.5",
     "express": "latest",
-    "request": "latest"
+    "request": "latest",
+    "request-progress": "^3.0.0"
   }
 }

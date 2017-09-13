@@ -4,16 +4,18 @@ const https = require('https');
 const fs = require('fs');
 const download = require('download');
 const path = require('path');
+const progress = require('request-progress');
+const colors = require('colors');
 
-console.log('#############################');
-console.log('### CH DOWNLOADER 0.0.1   ###');
-console.log('### this is alpha version ###'.toUpperCase());
-console.log('#############################\n');
+console.log('#############################'.bgWhite.black);
+console.log('### CH DOWNLOADER 0.0.1   ###'.bgWhite.black);
+console.log('### this is alpha version ###'.toUpperCase().bgWhite.black);
+console.log('#############################\n'.bgWhite.black);
 
-if (!fs.existsSync(path.resolve(__dirname, './output'))) {
-    console.log('Create folder output');
-    fs.mkdirSync('./output');
-}
+// if (!fs.existsSync(path.resolve(__dirname, './output'))) {
+//     console.log('Create folder output');
+//     fs.mkdirSync('./output');
+// }
 
 function getVideos(url) {
     return new Promise(function(resolve, reject) {
@@ -54,12 +56,24 @@ process.argv.forEach(function (val, index, array) {
                 });
                 console.log('Start download video, please wait...');
                 videos.map(video => {
-                    download(video.url).then(result => {
-                        console.log(`download file ${video.name} done!`);
-                        fs.writeFileSync(`output/${video.name}.mp4`, result);  
-                    });
+                    progress(request(video.url), { throttle: 2000, delay: 1000 })
+                        .on('progress', function(state) {
+                            console.log(`\nDownload video: ${video.name}...`.blue);
+                            console.log('Percent:', `${state.percent.toFixed(2)}% downloaded\n`.blue);
+                        })
+                        .on('error', function(err) {
+                            console.log(`${err}`.red);
+                        })
+                        .on('end', function () {
+                            console.log(`Video ${video.name} downloaded!`.green);
+                        })
+                        .pipe(fs.createWriteStream(`${video.name}.mp4`));
+                    // download(video.url).then(result => {
+                    //     console.log(`download file ${video.name} done!`);
+                    //     fs.writeFileSync(`output/${video.name}.mp4`, result);  
+                    // });
                 });
             })
-            .catch(err => console.log(err));
+            .catch(err => console.log(`${err}`.red));
     }
 });
