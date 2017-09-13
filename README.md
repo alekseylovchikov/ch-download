@@ -9,5 +9,5 @@ npm install
 
 # How use:
 ```sh
-$ node index.js <course-url>
+node index.js <course-url>
 ```
