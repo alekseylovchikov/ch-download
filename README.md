@@ -11,3 +11,5 @@ npm install
 ```sh
 node index.js <course-url>
 ```
+
+* [Youtube how to video](https://www.youtube.com/watch?v=-MFb7MiXLOM)
