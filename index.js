@@ -5,17 +5,15 @@ const fs = require('fs');
 const download = require('download');
 const path = require('path');
 
-// fs.mkdirSync('./output');
-// console.log('make dir output');
-// result.map((video, index) => {
-//     download(video).then(data => {
-//         console.log(`download file ${video} done!`);
-//         if (index < 10) {
-//             index = `0${index}`;
-//         }
-//         fs.writeFileSync(`output/${index}.mp4`, data);  
-//     });
-// });
+console.log('#############################');
+console.log('### CH DOWNLOADER 0.0.1   ###');
+console.log('### this is alpha version ###'.toUpperCase());
+console.log('#############################\n');
+
+if (!fs.existsSync(path.resolve(__dirname, './output'))) {
+    console.log('Create folder output');
+    fs.mkdirSync('./output');
+}
 
 function getVideos(url) {
     return new Promise(function(resolve, reject) {
