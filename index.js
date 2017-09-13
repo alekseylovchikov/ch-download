@@ -12,11 +12,6 @@ console.log('### CH DOWNLOADER 0.0.1   ###'.bgWhite.black);
 console.log('### this is alpha version ###'.toUpperCase().bgWhite.black);
 console.log('#############################\n'.bgWhite.black);
 
-// if (!fs.existsSync(path.resolve(__dirname, './output'))) {
-//     console.log('Create folder output');
-//     fs.mkdirSync('./output');
-// }
-
 function getVideos(url) {
     return new Promise(function(resolve, reject) {
         let result = [];
@@ -68,10 +63,6 @@ process.argv.forEach(function (val, index, array) {
                             console.log(`Video ${video.name} downloaded!`.green);
                         })
                         .pipe(fs.createWriteStream(`${video.name}.mp4`));
-                    // download(video.url).then(result => {
-                    //     console.log(`download file ${video.name} done!`);
-                    //     fs.writeFileSync(`output/${video.name}.mp4`, result);  
-                    // });
                 });
             })
             .catch(err => console.log(`${err}`.red));
