@@ -2,12 +2,14 @@
 
 # How to install:
 ```sh
-npm i parsecoursehunters
+git clone https://github.com/alekseylovchikov/ch-download.git
+cd ch-download
+npm install
 ```
 
 # How to use:
 ```sh
-parsecoursehunters <course-url>
+node index.js <course-url>
 ```
 
 [Youtube how to video](https://www.youtube.com/watch?v=JG9VyqK8if8)
