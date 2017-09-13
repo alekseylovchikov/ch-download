@@ -49,18 +49,16 @@ process.argv.forEach(function (val, index, array) {
                 data.result.map((url, index) => {
                     videos.push({ url, name: data.names[index] });
                 });
-                console.log('Start download video, please wait...');
+                console.log('Start download videos, please wait...');
                 videos.map(video => {
+                    console.log(`Start download video: ${video.name}`.blue);
                     progress(request(video.url), { throttle: 2000, delay: 1000 })
-                        .on('progress', function(state) {
-                            console.log(`\nDownload video: ${video.name}...`.blue);
-                            console.log('Progress:', `${state.percent}\n`.blue);
-                        })
+                        .on('progress', function(state) {})
                         .on('error', function(err) {
                             console.log(`${err}`.red);
                         })
                         .on('end', function () {
-                            console.log(`Video ${video.name} downloaded!`.green);
+                            console.log(`End download video ${video.name}`.green);
                         })
                         .pipe(fs.createWriteStream(`${video.name}.mp4`));
                 });
