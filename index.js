@@ -36,9 +36,6 @@ function getVideos(url) {
               let videoName = el.children[0].data.replace(/[\/:*?"&lt;&gt;|]/g, '');
               names.push(videoName);
             }
-						// if (el.name === 'span') {
-						// 	names.push(el.children[0].data);
-						// }
 					});
 					filterData.map(el => {
 						result.push(el.attribs.href);
