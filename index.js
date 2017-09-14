@@ -32,9 +32,13 @@ function getVideos(url) {
 					);
 					const filterSpan = dataArray.filter(el => el.name === 'span');
 					filterSpan.map(el => {
-						if (el.name === 'span') {
-							names.push(el.children[0].data);
-						}
+            if (el.name === 'span') {
+              let videoName = el.children[0].data.replace(/[\/:*?"&lt;&gt;|]/g, '');
+              names.push(videoName);
+            }
+						// if (el.name === 'span') {
+						// 	names.push(el.children[0].data);
+						// }
 					});
 					filterData.map(el => {
 						result.push(el.attribs.href);
