@@ -33,7 +33,7 @@ function getVideos(url) {
 					const filterSpan = dataArray.filter(el => el.name === 'span');
 					filterSpan.map(el => {
             if (el.name === 'span') {
-              let videoName = el.children[0].data.replace(/[\/:*?"&lt;&gt;|]/g, '');
+              const videoName = el.children[0].data.replace(/[\/:*?"<>|]/g, '');
               names.push(videoName);
             }
 					});
