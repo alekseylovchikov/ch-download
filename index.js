@@ -10,9 +10,12 @@ const progress = require('request-progress');
 const colors = require('colors');
 
 console.log('#############################'.bgWhite.black);
-console.log('### CH DOWNLOADER 0.0.1   ###'.bgWhite.black);
+console.log('### CH DOWNLOADER 0.0.2   ###'.bgWhite.black);
 console.log('### this is alpha version ###'.toUpperCase().bgWhite.black);
 console.log('#############################\n'.bgWhite.black);
+
+const logger = fs.createWriteStream('videos.txt', { flags: 'a' });
+console.log('Create videos.txt file'.blue);
 
 function getVideos(url) {
 	return new Promise(function(resolve, reject) {
@@ -34,6 +37,7 @@ function getVideos(url) {
 					filterSpan.map(el => {
             if (el.name === 'span') {
               const videoName = el.children[0].data.replace(/[\/:*?"<>|]/g, '');
+              logger.write(`${videoName}\n`);
               names.push(videoName);
             }
 					});
@@ -49,28 +53,31 @@ function getVideos(url) {
 	});
 }
 
-process.argv.forEach(function(val, index, array) {
-	let videos = [];
-	if (index === 2) {
-		getVideos(val)
-			.then(data => {
-				data.result.map((url, index) => {
-					videos.push({ url, name: data.names[index] });
-				});
-				console.log('Start download videos, please wait...');
-				videos.map(video => {
-					console.log(`Start download video: ${video.name}`.blue);
-					progress(request(video.url), { throttle: 2000, delay: 1000 })
-						.on('progress', function(state) {})
-						.on('error', function(err) {
-							console.log(`${err}`.red);
-						})
-						.on('end', function() {
-							console.log(`End download video ${video.name}`.green);
-						})
-						.pipe(fs.createWriteStream(`${video.name}.mp4`));
-				});
-			})
-			.catch(err => console.log(`${err}`.red));
-	}
-});
+const index = process.argv.indexOf('--course-url');
+
+if (index > -1) {
+  const courseUrl = process.argv[index + 1];
+  const videos = [];
+	getVideos(courseUrl)
+    .then(data => {
+      data.result.map((url, i) => {
+        videos.push({ url, name: data.names[i] });
+      });
+      console.log('Start download videos, please wait...');
+      videos.map(video => {
+        console.log(`Start download video: ${video.name}`.blue);
+        progress(request(video.url), { throttle: 2000, delay: 1000 })
+          .on('progress', function(state) {})
+          .on('error', function(err) {
+            console.log(`${err}`.red);
+          })
+          .on('end', function() {
+            console.log(`End download video ${video.name}`.green);
+          })
+          .pipe(fs.createWriteStream(`${video.name}.mp4`));
+      });
+  })
+  .catch(err => console.log(`${err}`.red));
+} else {
+  console.log('Use: node index --course-url <course-url>'.blue);
+}
