@@ -9,13 +9,12 @@ const path = require('path');
 const progress = require('request-progress');
 const colors = require('colors');
 
-console.log('#############################'.bgWhite.black);
-console.log('### CH DOWNLOADER 0.0.2   ###'.bgWhite.black);
-console.log('### this is alpha version ###'.toUpperCase().bgWhite.black);
-console.log('#############################\n'.bgWhite.black);
-
-const logger = fs.createWriteStream('videos.txt', { flags: 'a' });
-console.log('Create videos.txt file'.blue);
+function printHeader() {
+  console.log('#############################'.green);
+  console.log('###  CH DOWNLOADER 0.0.2  ###'.green);
+  console.log('### this is alpha version ###'.toUpperCase().green);
+  console.log('#############################\n'.green);
+}
 
 function getVideos(url) {
 	return new Promise(function(resolve, reject) {
@@ -53,9 +52,20 @@ function getVideos(url) {
 	});
 }
 
+function printUsage() {
+  let filename = path.basename(process.argv[1]);
+  console.log(`usage: node ${filename} -u course-url`.yellow);
+  console.log(`  -u, --url: https://coursehunters.net/course_name`.yellow);
+}
+
 const index = process.argv.indexOf('--course-url');
 
 if (index > -1) {
+  printHeader();
+
+  const logger = fs.createWriteStream('videos.txt', { flags: 'a' });
+  console.log('Create videos.txt file'.blue);
+
   const courseUrl = process.argv[index + 1];
   const videos = [];
 	getVideos(courseUrl)
@@ -79,5 +89,5 @@ if (index > -1) {
   })
   .catch(err => console.log(`${err}`.red));
 } else {
-  console.log('Use: node index --course-url <course-url>'.blue);
+  printUsage();
 }
