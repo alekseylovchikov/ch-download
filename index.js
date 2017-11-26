@@ -121,11 +121,9 @@ validateParams(flags, indexUrlFlag, indexDirFlag);
 printHeader();
 
 const courseUrl = process.argv[indexUrlFlag + 1];
-let downloadFolder;
-if (indexDirFlag == -1)
-  downloadFolder = getLastSegment(courseUrl);
-else
-  downloadFolder = process.argv[indexDirFlag + 1];
+const downloadFolder = (indexDirFlag == -1) ?
+  getLastSegment(courseUrl) :
+  process.argv[indexDirFlag + 1];
 
 createFolder(downloadFolder);
 
