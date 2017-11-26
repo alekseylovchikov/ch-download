@@ -66,11 +66,11 @@ function createFolder(downloadFolder) {
       if (err.code !== 'EEXIST') {
         throw err;
       }
-
-      console.log(`Directory ${curDir} already exists!`.blue);
+      if (curDir == downloadFolder)
+        console.log(`Directory ${curDir} already exists!`.blue);
       return curDir;
     }
-    console.log(`Directory ${downloadFolder} created`.blue);
+    console.log(`Directory ${curDir} created`.blue);
     return curDir;
   }, initDir);
 }
