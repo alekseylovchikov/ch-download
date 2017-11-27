@@ -8,6 +8,7 @@ const download = require('download');
 const path = require('path');
 const progress = require('request-progress');
 const colors = require('colors');
+const readline = require('readline');
 
 function getFlagIndex(flags_versions) {
   let indexFlag = -1;
@@ -129,6 +130,18 @@ function getVideos(url) {
 	});
 }
 
+function writeWaitingInfo(state) {
+  cleanLine();
+  let text = `${state.percent * 100}% | ${state.size.transferred} bytes received out of ${state.size.total} bytes | remaining ${state.time.remaining} sec`;
+  process.stdout.write(text);
+}
+
+function cleanLine()
+{
+  readline.clearLine(process.stdout, 0);
+  readline.cursorTo(process.stdout, 0, null);
+}
+
 const url = 'url';
 const dirName = 'dirName';
 let flags = { url: ['--url', '-u'], dirName: ['--dir', '-d'] };
@@ -146,25 +159,27 @@ const downloadFolder = (indexDirFlag == -1) ?
 createFolder(downloadFolder);
 const logger = createLogger(downloadFolder);
 
- //
- //  const videos = [];
-	// getVideos(courseUrl)
- //    .then(data => {
- //      data.result.map((url, i) => {
- //        videos.push({ url, name: data.names[i] });
- //      });
- //      console.log('Start download videos, please wait...');
- //      videos.map(video => {
- //        console.log(`Start download video: ${video.name}`.blue);
- //        progress(request(video.url), { throttle: 2000, delay: 1000 })
- //          .on('progress', function(state) {})
- //          .on('error', function(err) {
- //            console.log(`${err}`.red);
- //          })
- //          .on('end', function() {
- //            console.log(`End download video ${video.name}`.green);
- //          })
- //          .pipe(fs.createWriteStream(`${video.name}.mp4`));
- //      });
- //  })
- //  .catch(err => console.log(`${err}`.red));
+const videos = [];
+getVideos(courseUrl)
+  .then(data => {
+    data.result.map((url, i) => {
+      videos.push({ url, name: data.names[i] });
+    });
+    console.log('Start download videos, please wait...');
+    videos.map(video => {
+      console.log(`Start download video: ${video.name}`.blue);
+      progress(request(video.url), { throttle: 2000, delay: 1000 })
+        .on('progress', function(state) {
+          writeWaitingInfo(state);
+        })
+        .on('error', function(err) {
+          console.log(`${err}`.red);
+        })
+        .on('end', function() {
+          cleanLine();
+          console.log(`End download video ${video.name}`.green);
+        })
+        .pipe(fs.createWriteStream(`${downloadFolder}${path.sep}${video.name}.mp4`));
+    });
+})
+.catch(err => console.log(`${err}`.red));
