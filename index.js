@@ -66,13 +66,31 @@ function createFolder(downloadFolder) {
       if (err.code !== 'EEXIST') {
         throw err;
       }
-      if (curDir == downloadFolder)
-        console.log(`Directory ${curDir} already exists!`.blue);
+      if (curDir == makeDownloadFolderPath(downloadFolder))
+        console.log(`Directory ${curDir} already exists`.blue);
       return curDir;
     }
     console.log(`Directory ${curDir} created`.blue);
     return curDir;
   }, initDir);
+}
+
+function makeDownloadFolderPath(downloadFolder) {
+  const sep = path.sep;
+  const folders = process.argv[1].split(sep);
+  folders.pop();
+  folders.push(downloadFolder);
+  const downloadFolderPath = folders.join(sep);
+  return downloadFolderPath;
+}
+
+function createLogger(downloadFolder) {
+  const logFile =`${downloadFolder}${path.sep}videos.txt`
+  fs.existsSync(logFile) ?
+    console.log(`File ${logFile} already exists`.blue) :
+    console.log(`File ${logFile} created`.blue);
+  const logger = fs.createWriteStream(logFile, { flags: 'a' });
+  return logger;
 }
 
 function getVideos(url) {
@@ -126,9 +144,7 @@ const downloadFolder = (indexDirFlag == -1) ?
   process.argv[indexDirFlag + 1];
 
 createFolder(downloadFolder);
-
- //  const logger = fs.createWriteStream('videos.txt', { flags: 'a' });
- //  console.log('Create videos.txt file'.blue);
+const logger = createLogger(downloadFolder);
 
  //
  //  const videos = [];
