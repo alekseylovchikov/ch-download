@@ -152,16 +152,32 @@ function toMb(bytes)
 
 function downloadVideos(videos)
 {
-  var x = 0;
-  const loopArray = function(arr) {
-    downloadOneVideo(arr[x], function() {
+  var x = findNotExistingVideo(videos);
+  if (x >= videos.length)
+    return ;
+  const loopArray = function(videos) {
+    downloadOneVideo(videos[x], function() {
       x++;
-      if (x < arr.length) {
-          loopArray(arr);
+      if (x < videos.length) {
+          loopArray(videos);
       }
     });
   }
   loopArray(videos);
+}
+
+function findNotExistingVideo(videos)
+{
+  let i = 0;
+  for (let video of videos) {
+    if (fs.existsSync(`${downloadFolder}${path.sep}${video.name}.mp4`)) {
+      console.log(`File \'${video.name}\' already exists`.blue);
+      i++;
+    } else {
+      break ;
+    }
+  }
+  return i;
 }
 
 function downloadOneVideo(video, nextVideo) {
