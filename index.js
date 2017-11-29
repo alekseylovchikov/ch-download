@@ -114,7 +114,6 @@ function getVideos(url) {
 					filterSpan.map(el => {
             if (el.name === 'span') {
               const videoName = el.children[0].data.replace(/[\/:*?"<>|]/g, '');
-              logger.write(`${videoName}\n`);
               names.push(videoName);
             }
 					});
@@ -177,6 +176,7 @@ function downloadOneVideo(video, nextVideo) {
     .on('end', function() {
       cleanLine();
       console.log(`End download video ${video.name}`.green);
+      logger.write(`${video.name}\n`);
       nextVideo();
     })
     .pipe(fs.createWriteStream(`${downloadFolder}${path.sep}${video.name}.mp4`));
