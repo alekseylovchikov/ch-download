@@ -132,7 +132,11 @@ function getVideos(url) {
 
 function writeWaitingInfo(state) {
   cleanLine();
-  let text = `${state.percent * 100}% | ${state.size.transferred} bytes received out of ${state.size.total} bytes | remaining ${state.time.remaining} sec`;
+  let percent = (state.percent * 100).toFixed(2);
+  let transferred = toMb(state.size.transferred).toFixed(2);
+  let total = toMb(state.size.total).toFixed(2);
+  let remaining = state.time.remaining.toFixed(2);
+  let text = `${percent}% | ${transferred} Mb received out of ${total} Mb | remaining ${remaining} sec`;
   process.stdout.write(text);
 }
 
@@ -140,6 +144,42 @@ function cleanLine()
 {
   readline.clearLine(process.stdout, 0);
   readline.cursorTo(process.stdout, 0, null);
+}
+
+function toMb(bytes)
+{
+  return bytes / (1024 * 1024);
+}
+
+function downloadVideos(videos)
+{
+  var x = 0;
+  const loopArray = function(arr) {
+    downloadOneVideo(arr[x], function() {
+      x++;
+      if (x < arr.length) {
+          loopArray(arr);
+      }
+    });
+  }
+  loopArray(videos);
+}
+
+function downloadOneVideo(video, nextVideo) {
+  console.log(`Start download video: ${video.name}`.blue);
+  progress(request(video.url), { throttle: 2000, delay: 1000 })
+    .on('progress', function(state) {
+      writeWaitingInfo(state);
+    })
+    .on('error', function(err) {
+      console.log(`${err}`.red);
+    })
+    .on('end', function() {
+      cleanLine();
+      console.log(`End download video ${video.name}`.green);
+      nextVideo();
+    })
+    .pipe(fs.createWriteStream(`${downloadFolder}${path.sep}${video.name}.mp4`));
 }
 
 const url = 'url';
@@ -166,20 +206,6 @@ getVideos(courseUrl)
       videos.push({ url, name: data.names[i] });
     });
     console.log('Start download videos, please wait...');
-    videos.map(video => {
-      console.log(`Start download video: ${video.name}`.blue);
-      progress(request(video.url), { throttle: 2000, delay: 1000 })
-        .on('progress', function(state) {
-          writeWaitingInfo(state);
-        })
-        .on('error', function(err) {
-          console.log(`${err}`.red);
-        })
-        .on('end', function() {
-          cleanLine();
-          console.log(`End download video ${video.name}`.green);
-        })
-        .pipe(fs.createWriteStream(`${downloadFolder}${path.sep}${video.name}.mp4`));
-    });
+    downloadVideos(videos);
 })
 .catch(err => console.log(`${err}`.red));
