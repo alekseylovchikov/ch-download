@@ -131,11 +131,12 @@ function getVideos(url) {
 
 function writeWaitingInfo(state) {
   cleanLine();
-  let percent = (state.percent * 100).toFixed(2);
-  let transferred = toMb(state.size.transferred).toFixed(2);
-  let total = toMb(state.size.total).toFixed(2);
-  let remaining = state.time.remaining.toFixed(2);
-  let text = `${percent}% | ${transferred} Mb received out of ${total} Mb | remaining ${remaining} sec`;
+  const percent = (state.percent * 100).toFixed(2),
+        transferred = formatBytes(state.size.transferred),
+        total = formatBytes(state.size.total),
+        remaining = Math.round(state.time.remaining),
+        speed = formatBytes(state.speed),
+        text = `${percent}% | ${transferred} / ${total} | ${speed}/sec | ${remaining} sec`;
   process.stdout.write(text);
 }
 
@@ -145,9 +146,13 @@ function cleanLine()
   readline.cursorTo(process.stdout, 0, null);
 }
 
-function toMb(bytes)
-{
-  return bytes / (1024 * 1024);
+function formatBytes(bytes, decimals) {
+   if (bytes == 0) return '0 Bytes';
+   let k = 1024,
+       dm = decimals || 2,
+       sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+       i = Math.floor(Math.log(bytes) / Math.log(k));
+   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
 function downloadVideos(videos)
