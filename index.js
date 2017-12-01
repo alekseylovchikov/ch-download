@@ -46,7 +46,7 @@ function printUsage() {
 
 function printHeader() {
   console.log('#############################'.green);
-  console.log('###  CH DOWNLOADER 0.0.2  ###'.green);
+  console.log('###  CH DOWNLOADER 0.0.3  ###'.green);
   console.log('### this is alpha version ###'.toUpperCase().green);
   console.log('#############################\n'.green);
 }
