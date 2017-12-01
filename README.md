@@ -9,7 +9,12 @@ npm install
 
 # How to use:
 ```sh
-node index --course-url <course-url>
+node index -u course-url [-d dirname]
+```
+### Arguments:
+```sh
+-u, --url: https://coursehunters.net/course_name
+-d, --dir: download folder, default <course_name>
 ```
 
 [Youtube how to video](https://www.youtube.com/watch?v=JG9VyqK8if8)
