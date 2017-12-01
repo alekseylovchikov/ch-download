@@ -17,4 +17,9 @@ node index -u course-url [-d dirname]
 -d, --dir: download folder, default <course_name>
 ```
 
-[Youtube how to video](https://www.youtube.com/watch?v=JG9VyqK8if8)
+[Youtube how to video](https://www.youtube.com/watch?v=IeyUGMTyBdo)
+
+# Authors:
+
+- [alekseylovchikov](https://github.com/alekseylovchikov)
+- [SergeiKaptelin](https://github.com/SergeiKaptelin)
