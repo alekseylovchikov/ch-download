@@ -135,7 +135,7 @@ function writeWaitingInfo(state) {
         transferred = formatBytes(state.size.transferred),
         total = formatBytes(state.size.total),
         remaining = secondsToHms(state.time.remaining),
-        speed = bytesToSize(state.speed),
+        speed = formatBytes(state.speed),
         text = `${percent}% | ${transferred} / ${total} | ${speed}/sec | ${remaining}`;
   process.stdout.write(text);
 }
@@ -164,14 +164,6 @@ function secondsToHms(sec) {
     var ss = s < 10 ? '0' + s : s;
     return `${hh}:${mm}:${ss}`;
 }
-
-function bytesToSize(bytes) {
-    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    if (bytes == 0) return 'n/a';
-    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-    if (i == 0) return bytes + ' ' + sizes[i];
-    return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
-};
 
 function downloadVideos(videos)
 {
