@@ -134,9 +134,9 @@ function writeWaitingInfo(state) {
   const percent = (state.percent * 100).toFixed(2),
         transferred = formatBytes(state.size.transferred),
         total = formatBytes(state.size.total),
-        remaining = Math.round(state.time.remaining),
+        remaining = secondsToHms(state.time.remaining),
         speed = bytesToSize(state.speed),
-        text = `${percent}% | ${transferred} / ${total} | ${speed}/sec | ${remaining} sec`;
+        text = `${percent}% | ${transferred} / ${total} | ${speed}/sec | ${remaining}`;
   process.stdout.write(text);
 }
 
@@ -153,6 +153,16 @@ function formatBytes(bytes, decimals) {
        sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
        i = Math.floor(Math.log(bytes) / Math.log(k));
    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+function secondsToHms(sec) {
+    var h = Math.floor(sec / 3600);
+    var m = Math.floor(sec % 3600 / 60);
+    var s = Math.floor(sec % 3600 % 60);
+    var hh = h < 10 ? '0' + h : h;
+    var mm = m < 10 ? '0' + m : m;
+    var ss = s < 10 ? '0' + s : s;
+    return `${hh}:${mm}:${ss}`;
 }
 
 function bytesToSize(bytes) {
