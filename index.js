@@ -85,6 +85,12 @@ function makeDownloadFolderPath(downloadFolder) {
   return downloadFolderPath;
 }
 
+function findDownloadedVideos(downloadFolder) {
+  const logFile =`${downloadFolder}${path.sep}videos.txt`;
+  if (!fs.existsSync(logFile)) return [];
+  return fs.readFileSync(logFile).toString().split("\n");
+}
+
 function createLogger(downloadFolder) {
   const logFile =`${downloadFolder}${path.sep}videos.txt`
   fs.existsSync(logFile) ?
@@ -185,7 +191,8 @@ function findNotExistingVideo(videos)
 {
   let i = 0;
   for (let video of videos) {
-    if (fs.existsSync(`${downloadFolder}${path.sep}${video.name}.mp4`)) {
+    let filename = `${downloadFolder}${path.sep}${video.name}.mp4`;
+    if (fs.existsSync(filename) && isCompletelyDownloaded(video.name)) {
       console.log(`File \'${video.name}\' already exists`.blue);
       i++;
     } else {
@@ -193,6 +200,17 @@ function findNotExistingVideo(videos)
     }
   }
   return i;
+}
+
+function isCompletelyDownloaded(videoName) {
+  if (typeof downloadedVideos === 'undefined' || downloadedVideos.length === 0) {
+    return true;
+  }
+  for (let downloadedVideoName of downloadedVideos) {
+    if (videoName === downloadedVideoName)
+      return true;
+  }
+  return false;
 }
 
 function downloadOneVideo(video, nextVideo) {
@@ -228,6 +246,7 @@ const downloadFolder = (indexDirFlag == -1) ?
   process.argv[indexDirFlag + 1];
 
 createFolder(downloadFolder);
+const downloadedVideos = findDownloadedVideos(downloadFolder);
 const logger = createLogger(downloadFolder);
 
 const videos = [];
