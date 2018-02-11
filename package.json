@@ -10,10 +10,12 @@
   "author": "Aleksey Lovchikov <alelov@brabdev.com> (github.com/alekseylovchikov)",
   "license": "ISC",
   "dependencies": {
+    "app-module-path": "^2.2.0",
     "cheerio": "latest",
     "colors": "^1.1.2",
     "download": "^6.2.5",
     "express": "latest",
+    "github-version-checker": "^1.2.0",
     "request": "latest",
     "request-progress": "^3.0.0"
   }
