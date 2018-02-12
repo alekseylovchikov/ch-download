@@ -10,11 +10,17 @@
   "author": "Aleksey Lovchikov <alelov@brabdev.com> (github.com/alekseylovchikov)",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.17.1",
     "cheerio": "latest",
     "colors": "^1.1.2",
     "download": "^6.2.5",
+    "eslint-config-airbnb": "^16.1.0",
     "express": "latest",
     "request": "latest",
     "request-progress": "^3.0.0"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0"
   }
 }
