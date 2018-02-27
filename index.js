@@ -57,6 +57,9 @@ function startDownloading() {
   createFolder(downloadFolder);
   const logger = createLogger(downloadFolder);
 
+  const lessonNumbers = (indexLessonsFlag === -1) ?
+    null :
+    getLessonNumbers(process.argv[indexLessonsFlag + 1]);
   const videos = [];
   getVideos(courseUrl)
     .then(data => {
@@ -74,11 +77,39 @@ function getLastSegment(url) {
   return parts.pop() || parts.pop(); // handle potential trailing slash
 }
 
+function getLessonNumbers(lessonsString) {
+  let lessonsNumbers = [];
+  const regExpComma = /\s*,\s*/,
+        regExpDash = /\s*-\s*/,
+        lessonList = lessonsString.split(regExpComma);
+  for (let item of lessonList) {
+    const dashCounter = (item.match(/-/g) || []).length;
+    if (dashCounter === 1) {
+      const periodList = item.split(regExpDash),
+            firstNumber = Number(periodList[0]),
+            lastNumber = Number(periodList[1]);
+      for (let i = firstNumber; i <= lastNumber; i++) {
+        lessonsNumbers.push(i);
+      }
+    } else if (dashCounter === 0) {
+      lessonsNumbers.push(Number(item));
+    }
+  }
+  lessonsNumbers = lessonsNumbers.sort(function (a, b) {
+      return a - b;
+    })
+    .filter(function (value, index, self) {
+      return self.indexOf(value) === index;
+    });
+  return lessonsNumbers;
+}
+
 const url = 'url';
 const dirName = 'dirName';
-let flags = { url: ['--url', '-u'], dirName: ['--dir', '-d'] };
+let flags = { url: ['--url', '-u'], dirName: ['--dir', '-d'], lessons: ['--lessons', '-l'] };
 const indexUrlFlag = getFlagIndex(flags.url);
 const indexDirFlag = getFlagIndex(flags.dirName);
+const indexLessonsFlag = getFlagIndex(flags.lessons);
 
 validateParams(flags, indexUrlFlag, indexDirFlag);
 printHeader();
