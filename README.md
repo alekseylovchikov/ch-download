@@ -9,12 +9,13 @@ npm install
 
 # How to use:
 ```sh
-node index -u course-url [-d dirname]
+node index -u course-url [-d dirname] [-l lessons]
 ```
 ### Arguments:
 ```sh
 -u, --url: https://coursehunters.net/course_name
 -d, --dir: download folder, default <course_name>
+-l, --lessons: download only listed lessons, e.g.: "1-5, 7, 10, 12-15" or 3-7,9,11,15-20
 ```
 
 [Youtube how to video](https://www.youtube.com/watch?v=IeyUGMTyBdo)
