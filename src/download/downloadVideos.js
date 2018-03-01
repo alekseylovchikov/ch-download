@@ -8,11 +8,43 @@ const readline = require('readline');
 
 const findNotExistingVideo = require('src/download/findNotExistingVideo');
 
-function downloadVideos(logger, videos, downloadFolder)
+function downloadVideos(logger, videos, downloadFolder, lessonNumbers)
 {
-  var x = findNotExistingVideo(videos, downloadFolder);
+  if (lessonNumbers !== null) {
+    downloadSelectively(logger, videos, downloadFolder, lessonNumbers);
+    return true;
+  }
+  downloadAll(logger, videos, downloadFolder);
+  return true;
+}
+
+function downloadSelectively(logger, videos, downloadFolder, lessonNumbers) {
+  var i = 0;
+  if (lessonNumbers[i] >= videos.length) {
+    return false;
+  }
+  console.log(`Will be downloaded videos number ${lessonNumbers.join(', ')}`.blue);
+  const loopArr = function(videos) {
+    downloadOneVideo(logger, downloadFolder, videos[lessonNumbers[i] - 1], function() {
+      i++;
+      if (i < videos.length && i < lessonNumbers.length) {
+        loopArr(videos);
+      }
+    });
+  }
+  loopArr(videos);
+  return true;
+}
+
+function downloadAll(logger, videos, downloadFolder) {
+  var x = findNotExistingVideo(videos, downloadFolder),
+      lessonNumbers = [];
   if (x >= videos.length)
-    return ;
+    return false;
+  for (let i = x; i < videos.length; i++) {
+    lessonNumbers.push(i);
+  }
+  console.log(`Will be downloaded videos number ${lessonNumbers.join(', ')}`.blue);
   const loopArray = function(videos) {
     downloadOneVideo(logger, downloadFolder, videos[x], function() {
       x++;
@@ -22,6 +54,7 @@ function downloadVideos(logger, videos, downloadFolder)
     });
   }
   loopArray(videos);
+  return true;
 }
 
 function downloadOneVideo(logger, downloadFolder, video, nextVideo) {

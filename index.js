@@ -67,7 +67,7 @@ function startDownloading() {
         videos.push({ url, name: data.names[i] });
       });
       console.log('Start download videos, please wait...');
-      downloadVideos(logger, videos, downloadFolder);
+      downloadVideos(logger, videos, downloadFolder, lessonNumbers);
   })
   .catch(err => console.log(`${err}`.red));
 }
@@ -78,30 +78,36 @@ function getLastSegment(url) {
 }
 
 function getLessonNumbers(lessonsString) {
-  let lessonsNumbers = [];
+  let lessonNumbers = [];
   const regExpComma = /\s*,\s*/,
         regExpDash = /\s*-\s*/,
         lessonList = lessonsString.split(regExpComma);
   for (let item of lessonList) {
     const dashCounter = (item.match(/-/g) || []).length;
     if (dashCounter === 1) {
-      const periodList = item.split(regExpDash),
-            firstNumber = Number(periodList[0]),
-            lastNumber = Number(periodList[1]);
+      const periodList = item.split(regExpDash);
+      let firstNumber = Number(periodList[0]),
+          lastNumber = Number(periodList[1]),
+          buf = 0;
+      if (firstNumber > lastNumber) {
+        buf = firstNumber;
+        firstNumber = lastNumber;
+        lastNumber = buf;
+      }
       for (let i = firstNumber; i <= lastNumber; i++) {
-        lessonsNumbers.push(i);
+        lessonNumbers.push(i);
       }
     } else if (dashCounter === 0) {
-      lessonsNumbers.push(Number(item));
+      lessonNumbers.push(Number(item));
     }
   }
-  lessonsNumbers = lessonsNumbers.sort(function (a, b) {
+  lessonNumbers = lessonNumbers.sort(function (a, b) {
       return a - b;
     })
     .filter(function (value, index, self) {
       return self.indexOf(value) === index;
     });
-  return lessonsNumbers;
+  return lessonNumbers;
 }
 
 const url = 'url';
