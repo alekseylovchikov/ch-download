@@ -29,10 +29,10 @@ function isNextFlag(flags, param) {
 
 function printUsage() {
   let filename = path.basename(process.argv[1]);
-  console.log(`usage: node ${filename} -u course-url [-d dirname] [-l "lessons"]`.yellow);
+  console.log(`usage: node ${filename} -u course-url [-d dirname] [-l lessons]`.yellow);
   console.log(`  -u, --url: https://coursehunters.net/course_name`.yellow);
   console.log(`  -d, --dir: download folder, default <course_name>`.yellow);
-  console.log(`  -l, --lessons: download only listed lessons, e.g.: "1-5, 7, 10, 12-15"`.yellow);
+  console.log(`  -l, --lessons: download only listed lessons, e.g.: "1-5, 7, 10, 12-15" or 3-7,9,11,15-20`.yellow);
   process.exit(0);
 }
 
