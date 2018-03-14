@@ -2,14 +2,12 @@
 
 # How to install:
 ```sh
-git clone https://github.com/alekseylovchikov/ch-download.git
-cd ch-download
-npm install
+npm install -g parsecoursehunters
 ```
 
 # How to use:
 ```sh
-node index -u course-url [-d dirname] [-l lessons]
+coursehunters -u course-url [-d dirname] [-l lessons]
 ```
 ### Arguments:
 ```sh
