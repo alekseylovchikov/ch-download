@@ -1,15 +1,19 @@
 # Download videos (course) from coursehunters.net
 
 # How to install:
+
 ```sh
-npm install -g parsecoursehunters
+npm install -g https://github.com/alekseylovchikov/ch-download
 ```
 
 # How to use:
+
 ```sh
 coursehunters -u course-url [-d dirname] [-l lessons]
 ```
+
 ### Arguments:
+
 ```sh
 -u, --url: https://coursehunters.net/course_name
 -d, --dir: download folder, default <course_name>
@@ -20,5 +24,5 @@ coursehunters -u course-url [-d dirname] [-l lessons]
 
 # Authors:
 
-- [alekseylovchikov](https://github.com/alekseylovchikov)
-- [SergeiKaptelin](https://github.com/SergeiKaptelin)
+* [alekseylovchikov](https://github.com/alekseylovchikov)
+* [SergeiKaptelin](https://github.com/SergeiKaptelin)
