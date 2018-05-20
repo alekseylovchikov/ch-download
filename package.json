@@ -12,8 +12,7 @@
 		"nodejs",
 		"js"
 	],
-	"author":
-		"Aleksey Lovchikov <alelov@brabdev.com> (github.com/alekseylovchikov)",
+	"author": "Aleksey Lovchikov <alelov@brabdev.com> (github.com/alekseylovchikov)",
 	"license": "ISC",
 	"repository": {
 		"type": "git",

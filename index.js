@@ -66,7 +66,8 @@ function startDownloading() {
   getVideos(courseUrl)
     .then(data => {
       data.result.map((url, i) => {
-        videos.push({ url, name: data.names[i] });
+        const name = data.names[i].toString().replace(/[^A-Za-zА-Яа-я\d\s]/gmi, ''); // alelov
+        videos.push({ url, name });
       });
       console.log('Start download videos, please wait...');
       downloadVideos(logger, videos, downloadFolder, lessonNumbers);
