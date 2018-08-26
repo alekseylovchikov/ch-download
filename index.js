@@ -52,18 +52,6 @@ function checkNewVersion(startDownloading) {
 }
 
 function startDownloading() {
-  const courseUrl = process.argv[indexUrlFlag + 1];
-  const downloadFolder = (indexDirFlag == -1) ?
-    getLastSegment(courseUrl) :
-    process.argv[indexDirFlag + 1];
-
-  createFolder(downloadFolder);
-  const logger = createLogger(downloadFolder);
-
-  const lessonNumbers = (indexLessonsFlag === -1) ?
-    null :
-    getLessonNumbers(process.argv[indexLessonsFlag + 1]);
-  const videos = [];
   // get email password
   const e = process.argv.indexOf('-e');
   const p = process.argv.indexOf('-p');
@@ -72,35 +60,35 @@ function startDownloading() {
     const email = process.argv[e + 1];
     const password = process.argv[p + 1];
     getToken(email, password)
-      .then(token => {
-        getVideos(courseUrl, token)
-          .then(data => {
-            data.result.map((url, i) => {
-              const name = data.names[i].toString().replace(/[^A-Za-zА-Яа-я\d\s]/gmi, ''); // alelov
-              videos.push({ url, name });
-            });
-            console.log('Start download videos, please wait...');
-            downloadVideos(logger, videos, downloadFolder, lessonNumbers);
-          })
-          .catch(err => console.log(`${err}`.red));
-      })
-      .catch(err => {
-        // get token error
-        console.log('Check your email or password'.red);
-      });
+      .then(token => runGetVideos(token))
+      .catch(err => console.log('Check your email or password'.red));
   } else {
     // without email and password
-    getVideos(courseUrl)
-      .then(data => {
-        data.result.map((url, i) => {
-          const name = data.names[i].toString().replace(/[^A-Za-zА-Яа-я\d\s]/gmi, ''); // alelov
-          videos.push({ url, name });
-        });
-        console.log('Start download videos, please wait...');
-        downloadVideos(logger, videos, downloadFolder, lessonNumbers);
-      })
-      .catch(err => console.log(`${err}`.red));
+    runGetVideos();
   }
+}
+
+function runGetVideos(token) {
+  const courseUrl = process.argv[indexUrlFlag + 1];
+  const downloadFolder = (indexDirFlag == -1) ? getLastSegment(courseUrl) : process.argv[indexDirFlag + 1];
+
+  createFolder(downloadFolder);
+
+  const logger = createLogger(downloadFolder);
+
+  const lessonNumbers = (indexLessonsFlag === -1) ? null : getLessonNumbers(process.argv[indexLessonsFlag + 1]);
+  const videos = [];
+
+  getVideos(courseUrl, token)
+    .then(data => {
+      data.result.map((url, i) => {
+        const name = data.names[i].toString().replace(/[^A-Za-zА-Яа-я\d\s]/gmi, ''); // alelov
+        videos.push({ url, name });
+      });
+      console.log('Start download videos, please wait...');
+      downloadVideos(logger, videos, downloadFolder, lessonNumbers);
+    })
+    .catch(err => console.log(`${err}`.red));
 }
 
 function getLastSegment(url) {
