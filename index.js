@@ -22,6 +22,7 @@ const downloadVideos = require('src/download/downloadVideos.js');
 const getVideos = require('src/download/getVideos.js');
 const versionCheck = require('github-version-checker');
 const pkg = require('./package.json');
+const getToken = require('./src/download/getToken');
 
 function printHeader() {
   console.log('#############################'.green);
@@ -63,16 +64,43 @@ function startDownloading() {
     null :
     getLessonNumbers(process.argv[indexLessonsFlag + 1]);
   const videos = [];
-  getVideos(courseUrl)
-    .then(data => {
-      data.result.map((url, i) => {
-        const name = data.names[i].toString().replace(/[^A-Za-zА-Яа-я\d\s]/gmi, ''); // alelov
-        videos.push({ url, name });
+  // get email password
+  const e = process.argv.indexOf('-e');
+  const p = process.argv.indexOf('-p');
+  if (e > -1 && p > -1) {
+    // with email and password
+    const email = process.argv[e + 1];
+    const password = process.argv[p + 1];
+    getToken(email, password)
+      .then(token => {
+        getVideos(courseUrl, token)
+          .then(data => {
+            data.result.map((url, i) => {
+              const name = data.names[i].toString().replace(/[^A-Za-zА-Яа-я\d\s]/gmi, ''); // alelov
+              videos.push({ url, name });
+            });
+            console.log('Start download videos, please wait...');
+            downloadVideos(logger, videos, downloadFolder, lessonNumbers);
+          })
+          .catch(err => console.log(`${err}`.red));
+      })
+      .catch(err => {
+        // get token error
+        console.log('Check your email or password'.red);
       });
-      console.log('Start download videos, please wait...');
-      downloadVideos(logger, videos, downloadFolder, lessonNumbers);
-  })
-  .catch(err => console.log(`${err}`.red));
+  } else {
+    // without email and password
+    getVideos(courseUrl)
+      .then(data => {
+        data.result.map((url, i) => {
+          const name = data.names[i].toString().replace(/[^A-Za-zА-Яа-я\d\s]/gmi, ''); // alelov
+          videos.push({ url, name });
+        });
+        console.log('Start download videos, please wait...');
+        downloadVideos(logger, videos, downloadFolder, lessonNumbers);
+      })
+      .catch(err => console.log(`${err}`.red));
+  }
 }
 
 function getLastSegment(url) {

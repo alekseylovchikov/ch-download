@@ -3,11 +3,18 @@
 const cheerio = require('cheerio');
 const request = require('request');
 
-function getVideos(url) {
+function getVideos(url, token) {
   return new Promise(function(resolve, reject) {
     let result = [];
     let names = [];
-    request(url, function(err, res, html) {
+    const options = { url: url };
+    if (token) {
+      let jar = request.jar();
+      const cookie = request.cookie('accessToken=' + token);
+      jar.setCookie(cookie, url);
+      options.jar = jar;
+    }
+    request(options, function(err, res, html) {
       if (!err) {
         let $ = cheerio.load(html);
         $('#lessons-list').filter(function() {
