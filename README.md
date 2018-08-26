@@ -15,6 +15,8 @@ coursehunters -u course-url [-d dirname] [-l lessons]
 ### Arguments:
 
 ```sh
+-e: email for login
+-p: password for login
 -u, --url: https://coursehunters.net/course_name
 -d, --dir: download folder, default <course_name>
 -l, --lessons: download only listed lessons, e.g.: "1-5, 7, 10, 12-15" or 3-7,9,11,15-20
