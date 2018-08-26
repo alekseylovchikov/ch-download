@@ -9,7 +9,7 @@ npm install -g https://github.com/alekseylovchikov/ch-download
 # How to use:
 
 ```sh
-coursehunters -u course-url [-d dirname] [-l lessons]
+coursehunters -u course-url [-d dirname] [-l lessons] [-e email] [-p password]
 ```
 
 ### Arguments:
