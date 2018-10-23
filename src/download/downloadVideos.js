@@ -58,7 +58,8 @@ function downloadAll(logger, videos, downloadFolder) {
 }
 
 function downloadOneVideo(logger, downloadFolder, video, nextVideo) {
-  console.log(`Start download video: ${video.name}`.blue);
+  let videoName = video.name.replace("Урок ", "");
+  console.log(`Start download video: ${videoName}`.blue);
   progress(request(video.url), { throttle: 2000, delay: 1000 })
     .on('progress', function(state) {
       writeWaitingInfo(state);
@@ -68,11 +69,11 @@ function downloadOneVideo(logger, downloadFolder, video, nextVideo) {
     })
     .on('end', function() {
       cleanLine();
-      console.log(`End download video ${video.name}`.green);
-      logger.write(`${video.name}\n`);
+      console.log(`End download video ${videoName}`.green);
+      logger.write(`${videoName}\n`);
       nextVideo();
     })
-    .pipe(fs.createWriteStream(`${downloadFolder}${path.sep}${video.name}.mp4`));
+    .pipe(fs.createWriteStream(`${downloadFolder}${path.sep}${videoName}.mp4`));
 }
 
 module.exports = downloadVideos;
