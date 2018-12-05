@@ -60,7 +60,7 @@ function downloadAll(logger, videos, downloadFolder) {
 function downloadOneVideo(logger, downloadFolder, video, nextVideo) {
   let videoName = video.name.replace("Урок ", "");
   console.log(`Start download video: ${videoName}`.blue);
-  progress(request(video.url), { throttle: 2000, delay: 1000 })
+  progress(request(encodeURI(video.url)), { throttle: 2000, delay: 1000 })
     .on('progress', function(state) {
       writeWaitingInfo(state);
     })
