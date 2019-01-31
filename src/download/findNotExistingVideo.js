@@ -3,13 +3,13 @@
 const path = require('path');
 const fs = require('fs');
 
-function findNotExistingVideo(videos, downloadFolder)
-{
+function findNotExistingVideo(videos, downloadFolder) {
   let i = 0;
   for (let video of videos) {
-    let filename = `${downloadFolder}${path.sep}${video.name}.mp4`;
-    if (fs.existsSync(filename) && isCompletelyDownloaded(video.name, downloadFolder)) {
-      console.log(`File \'${video.name}\' already exists`.blue);
+    const name = video.name.toString().replace(/[^A-Za-zА-Яа-я\d\s]/gmi, '').replace('Урок ', '');
+    let filename = `${downloadFolder}${path.sep}${name}.mp4`;
+    if (fs.existsSync(filename) && isCompletelyDownloaded(name, downloadFolder)) {
+      console.log(`File "${name}" already exists`.red);
       i++;
     } else {
       break ;
