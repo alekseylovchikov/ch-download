@@ -22,7 +22,7 @@ coursehunters -u course-url [-d dirname] [-l lessons] [-e email] [-p password]
 -l, --lessons: download only listed lessons, e.g.: "1-5, 7, 10, 12-15" or 3-7,9,11,15-20
 ```
 
-[Youtube how to video](https://www.youtube.com/watch?v=IeyUGMTyBdo)
+[Youtube how to video](https://www.youtube.com/watch?v=qxcPrK7uW0s)
 
 # Authors:
 
