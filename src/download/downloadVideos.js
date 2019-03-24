@@ -58,7 +58,7 @@ function downloadAll(logger, videos, downloadFolder) {
 }
 
 function downloadOneVideo(logger, downloadFolder, video, nextVideo) {
-  let videoName = video.name.replace('Урок ', '');
+  let videoName = video.name.replace('Урок ', '').replace('\\', '');
   console.log(`Start download video: ${videoName}`.blue);
   progress(request(encodeURI(video.url)), { throttle: 2000, delay: 1000 })
     .on('progress', function(state) {
