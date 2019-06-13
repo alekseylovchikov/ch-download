@@ -26,10 +26,11 @@ function getVideos(url, token) {
           const filterData = dataArray.filter(
             el => el.name === 'link' && el.attribs.itemprop === 'contentUrl'
           );
-          const filterSpan = dataArray.filter(el => el.name === 'span');
+          const filterSpan = dataArray.filter(el => el.name === 'div' && el.attribs.class === 'lessons-name');
           filterSpan.map(el => {
-            if (el.name === 'span') {
-              const videoName = el.children[0].data.replace(/[\/:*?"<>|]/g, '');
+            if (el.name === 'div') {
+              const index = Number(el.parent.attribs['data-index']);
+              const videoName = `${index + 1} ` + el.children[0].data.replace(/[\/:*?"<>|]/g, '');
               names.push(videoName);
             }
           });
