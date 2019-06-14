@@ -1,7 +1,10 @@
 'use strict';
 
 const cheerio = require('cheerio');
-const request = require('request');
+let request = require('request');
+request = request.defaults({
+  jar: true
+});
 
 function getVideos(url, token) {
   return new Promise(function(resolve, reject) {
@@ -9,10 +12,10 @@ function getVideos(url, token) {
     let names = [];
     const options = { url: url };
     if (token) {
-      let jar = request.jar();
-      const cookie = request.cookie('accessToken=' + token);
-      jar.setCookie(cookie, url);
-      options.jar = jar;
+      const cookie = request.cookie(token);
+      options.headers = {
+        Cookie: cookie
+      };
     }
     request(options, function(err, res, html) {
       if (!err) {
