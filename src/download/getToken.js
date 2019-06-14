@@ -12,7 +12,7 @@ function getToken(e_mail, password) {
       data: JSON.stringify({ e_mail: e_mail, password: password }),
     })
       .then(res => {
-        if (res.data.token) resolve(res.data.token);
+        if (res.data.token) resolve(res.headers['set-cookie'][0] + '; accessToken=' + res.data.token);
       })
       .catch(err => reject(err));
   });

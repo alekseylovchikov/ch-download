@@ -32,6 +32,8 @@ function printUsage() {
   console.log(`usage: node ${filename} -u course-url [-d dirname] [-l lessons]`.yellow);
   console.log(`  -u, --url: https://coursehunters.net/course_name`.yellow);
   console.log(`  -d, --dir: download folder, default <course_name>`.yellow);
+  console.log(`  -e, --email: your email from coursehunters.net`.yellow);
+  console.log(`  -p, --pass: your password from coursehunters.net`.yellow);
   console.log(`  -l, --lessons: download only listed lessons, e.g.: "1-5, 7, 10, 12-15" or 3-7,9,11,15-20`.yellow);
   process.exit(0);
 }
