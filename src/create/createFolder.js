@@ -11,7 +11,7 @@ function createFolder(downloadFolder) {
     try {
       fs.mkdirSync(curDir);
     } catch (err) {
-      if (err.code !== 'EEXIST') {
+      if (err.code !== 'EEXIST' && err.code !== 'EISDIR') {
         throw err;
       }
       if (curDir == makeDownloadFolderPath(downloadFolder))
