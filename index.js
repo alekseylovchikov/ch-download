@@ -18,7 +18,8 @@ const validateParams = require('src/validate/validateParams');
 const getFlagIndex = require('src/validate/getFlagIndex');
 const createFolder = require('src/create/createFolder');
 const createLogger = require('src/create/createLogger');
-const downloadVideos = require('src/download/downloadVideos.js');
+const downloadVideos = require('src/download/downloadVideos');
+const downloadMaterials = require('src/download/downloadMaterials');
 const getVideos = require('src/download/getVideos.js');
 const versionCheck = require('github-version-checker');
 const pkg = require('./package.json');
@@ -87,6 +88,10 @@ function runGetVideos(token) {
       });
       console.log('Start download videos, please wait...');
       downloadVideos(logger, videos, downloadFolder, lessonNumbers);
+      if (data.urlMaterials !== undefined) {
+        downloadMaterials(data.urlMaterials, downloadFolder);
+      }
+
     })
     .catch(err => console.log(`${err}`.red));
 }
