@@ -2,7 +2,7 @@
 
 function printError(errorString) {
   console.log(errorString.red);
-  process.exit(0);
+  process.exit(1);
 }
 
 module.exports = printError;
