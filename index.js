@@ -86,12 +86,11 @@ function runGetVideos(token) {
         const name = data.names[i].toString().replace(/[^A-Za-zА-Яа-я\d\s]/gmi, ''); // alelov
         videos.push({ url, name });
       });
-      console.log('Start download videos, please wait...');
-      downloadVideos(logger, videos, downloadFolder, lessonNumbers);
       if (data.urlMaterials !== undefined) {
         downloadMaterials(data.urlMaterials, downloadFolder);
       }
-
+      console.log('Start download videos, please wait...');
+      downloadVideos(logger, videos, downloadFolder, lessonNumbers);
     })
     .catch(err => console.log(`${err}`.red));
 }

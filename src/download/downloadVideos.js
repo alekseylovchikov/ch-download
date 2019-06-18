@@ -79,6 +79,13 @@ function downloadOneVideo(logger, downloadFolder, video, nextVideo) {
       logger.write(`${videoName}\n`);
 
       progress(request(encodeURI(subtitleUrl)), { throttle: 2000, delay: 1000 })
+          .on('response', function (resp) {
+            if (parseInt(resp.statusCode) !== 404) {
+              this.pipe(fs.createWriteStream(`${downloadFolder}${path.sep}${videoName}.vtt`));
+            } else {
+              console.log('Subtitle does not exist');
+            }
+          })
           .on('progress', function(state) {
             writeWaitingInfo(state);
           })
@@ -89,8 +96,7 @@ function downloadOneVideo(logger, downloadFolder, video, nextVideo) {
           .on('end', function() {
             cleanLine();
             console.log(`End download subtitle for ${videoName}`.green);
-          })
-          .pipe(fs.createWriteStream(`${downloadFolder}${path.sep}${videoName}.vtt`));
+          });
 
       nextVideo();
     })
