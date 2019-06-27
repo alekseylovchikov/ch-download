@@ -33,7 +33,11 @@ function getVideos(url, token) {
           filterSpan.map(el => {
             if (el.name === 'div') {
               const index = Number(el.parent.attribs['data-index']);
-              const videoName = `${index + 1} ` + el.children[0].data.replace(/[\/:*?"<>|]/g, '');
+              let videoName;
+              if(el.children[0])
+                videoName = `${index + 1} ` + el.children[0].data.replace(/[\/:*?"<>|]/g, '');
+              else
+                videoName = 'Lesson '+`${index + 1}`;
               names.push(videoName);
             }
           });
