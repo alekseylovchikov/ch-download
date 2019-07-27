@@ -42,7 +42,7 @@ function downloadAll(logger, videos, downloadFolder) {
   if (x >= videos.length)
     return false;
   for (let i = x; i < videos.length; i++) {
-    lessonNumbers.push(i);
+    lessonNumbers.push(i + 1);
   }
   console.log(`Will be downloaded videos number ${lessonNumbers.join(', ')}`.blue);
   const loopArray = function(videos) {
