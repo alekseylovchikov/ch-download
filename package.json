@@ -1,7 +1,7 @@
 {
 	"name": "parsecoursehunters",
 	"version": "0.0.7",
-	"description": "Download courses from https://coursehunters.net/",
+	"description": "Download courses from https://coursehunter.net/",
 	"main": "index.js",
 	"scripts": {},
 	"bin": {
