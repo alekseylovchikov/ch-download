@@ -3,7 +3,7 @@ const axios = require('axios');
 function getToken(e_mail, password) {
   return new Promise((resolve, reject) => {
     axios({
-      url: 'https://coursehunters.net/api/auth/login',
+      url: 'https://coursehunter.net/api/auth/login',
       method: 'put',
       headers: {
         'content-type': 'application/json',
