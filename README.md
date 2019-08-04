@@ -8,8 +8,16 @@ npm install -g https://github.com/alekseylovchikov/ch-download
 
 # How to use:
 
+### Download premium courses (required paid subscription)
+
 ```sh
-coursehunters -u course-url [-d dirname] [-l lessons] [-e email] [-p password]
+coursehunters -u course-url -e email -p password [-d dirname] [-l lessons]
+```
+
+### Download free courses
+
+```sh
+coursehunters -u course-url [-d dirname] [-l lessons]
 ```
 
 ### Arguments:
@@ -26,5 +34,5 @@ coursehunters -u course-url [-d dirname] [-l lessons] [-e email] [-p password]
 
 # Authors:
 
-* [alekseylovchikov](https://github.com/alekseylovchikov)
-* [SergeiKaptelin](https://github.com/SergeiKaptelin)
+-   [alekseylovchikov](https://github.com/alekseylovchikov)
+-   [SergeiKaptelin](https://github.com/SergeiKaptelin)
