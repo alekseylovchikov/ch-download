@@ -1,9 +1,11 @@
 # Download videos (course) from coursehunter.net
 
-# How to install:
+# How to install (Node.js and git required):
 
 ```sh
-npm install -g https://github.com/alekseylovchikov/ch-download
+git clone https://github.com/alekseylovchikov/ch-download.git
+cd ch-download
+npm install
 ```
 
 # How to use:
@@ -30,7 +32,9 @@ coursehunters -u course-url [-d dirname] [-l lessons]
 -l, --lessons: download only listed lessons, e.g.: "1-5, 7, 10, 12-15" or 3-7,9,11,15-20
 ```
 
-[Youtube how to video](https://www.youtube.com/watch?v=qxcPrK7uW0s)
+### How to videos:
+
+[Download free courses](https://www.youtube.com/watch?v=-sFqEquzMbE)
 
 # Authors:
 
