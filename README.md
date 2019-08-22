@@ -1,6 +1,6 @@
 # Download videos (course) from coursehunter.net
 
-# How to install (Node.js and git required):
+# How to install (Node.js and GIT required):
 
 ```sh
 git clone https://github.com/alekseylovchikov/ch-download.git
@@ -34,7 +34,7 @@ coursehunters -u course-url [-d dirname] [-l lessons]
 
 ### How to videos:
 
-[Download free courses](https://www.youtube.com/watch?v=-sFqEquzMbE)
+[Download (without git) free courses](https://www.youtube.com/watch?v=-sFqEquzMbE)
 
 # Authors:
 
