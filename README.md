@@ -3,9 +3,9 @@
 # How to install (Node.js and GIT required):
 
 ```sh
-git clone https://github.com/alekseylovchikov/ch-download.git
-cd ch-download
-npm install
+~ git clone https://github.com/alekseylovchikov/ch-download.git
+~ cd ch-download
+~ npm install
 ```
 
 # How to use:
@@ -13,13 +13,15 @@ npm install
 ### Download premium courses (required paid subscription)
 
 ```sh
-coursehunters -u course-url -e email -p password [-d dirname] [-l lessons]
+# from downloaded directory
+~ node index.js -u course-url -e email -p password [-d dirname] [-l lessons]
 ```
 
 ### Download free courses
 
 ```sh
-coursehunters -u course-url [-d dirname] [-l lessons]
+# from downloaded directory
+~ node index.js -u course-url [-d dirname] [-l lessons]
 ```
 
 ### Arguments:
