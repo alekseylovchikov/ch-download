@@ -1,14 +1,14 @@
-'use strict';
+"use strict";
 
-const fs = require('fs');
-const path = require('path');
-const progress = require('request-progress');
-const request = require('request');
+const fs = require("fs");
+const path = require("path");
+const progress = require("request-progress");
+const request = require("request");
 
-const findNotExistingVideo = require('src/download/findNotExistingVideo');
-const findNotExistingSubtitle = require('src/download/findNotExistingSubtitle');
-const cleanLine = require('src/download/cleanLine');
-const writeWaitingInfo = require('src/download/writeWaitingInfo');
+const findNotExistingVideo = require("src/download/findNotExistingVideo");
+const findNotExistingSubtitle = require("src/download/findNotExistingSubtitle");
+const cleanLine = require("src/download/cleanLine");
+const writeWaitingInfo = require("src/download/writeWaitingInfo");
 
 function downloadVideos(logger, videos, downloadFolder, lessonNumbers) {
   if (lessonNumbers !== null) {
@@ -24,31 +24,38 @@ function downloadSelectively(logger, videos, downloadFolder, lessonNumbers) {
   if (lessonNumbers[i] >= videos.length) {
     return false;
   }
-  console.log(`Will be downloaded videos number ${lessonNumbers.join(', ')}`.blue);
+  console.log(
+    `Will be downloaded videos number ${lessonNumbers.join(", ")}`.blue
+  );
   const loopArr = function(videos) {
-    downloadOneVideo(logger, downloadFolder, videos[lessonNumbers[i] - 1], function() {
-      i++;
-      if (i < videos.length && i < lessonNumbers.length) {
-        loopArr(videos);
+    downloadOneVideo(
+      logger,
+      downloadFolder,
+      videos[lessonNumbers[i] - 1],
+      function() {
+        i++;
+        if (i < videos.length && i < lessonNumbers.length) {
+          loopArr(videos);
+        }
       }
-    });
-  }
+    );
+  };
   loopArr(videos);
   return true;
 }
 
 function downloadAll(logger, videos, downloadFolder) {
   let x = findNotExistingVideo(videos, downloadFolder),
-      lessonNumbers = [];
+    lessonNumbers = [];
   let y = findNotExistingSubtitle(videos, downloadFolder);
-  if (x >= videos.length)
-    return false;
-  if (y >= videos.length)
-    console.log('All Subtitles was download');
+  if (x >= videos.length) return false;
+  if (y >= videos.length) console.log("All Subtitles was download");
   for (let i = x; i < videos.length; i++) {
     lessonNumbers.push(i + 1);
   }
-  console.log(`Will be downloaded videos number ${lessonNumbers.join(', ')}`.blue);
+  console.log(
+    `Will be downloaded videos number ${lessonNumbers.join(", ")}`.blue
+  );
   const loopArray = function(videos) {
     downloadOneVideo(logger, downloadFolder, videos[x], function() {
       x++;
@@ -62,41 +69,57 @@ function downloadAll(logger, videos, downloadFolder) {
 }
 
 function downloadOneVideo(logger, downloadFolder, video, nextVideo) {
-  let videoName = video.name.replace('Урок ', '').replace('\\', '');
-  let subtitleUrl = video.url.replace('.mp4', '.vtt');
+  let videoName = video.name.replace("Урок ", "").replace("\\", "");
+
+  // normalizing the number by adding padding to it ex: 1-foo.mp4 become 001-foo.mp4
+  let list = videoName.split(" ");
+
+  // Add padding from the start of the number
+  list[0] = list[0].padStart(3, "0");
+
+  // convert array to string
+  // replace spaces with dashes, is useful in *nix OS system for easy copping via terminal
+  videoName = list.join("-");
+
+
+  let subtitleUrl = video.url.replace(".mp4", ".vtt");
   console.log(`Start download video: ${videoName}`.blue);
 
   progress(request(encodeURI(video.url)), { throttle: 2000, delay: 1000 })
-    .on('progress', function(state) {
+    .on("progress", function(state) {
       writeWaitingInfo(state);
     })
-    .on('error', function(err) {
+    .on("error", function(err) {
       console.log(`${err}`.red);
     })
-    .on('end', function() {
+    .on("end", function() {
       cleanLine();
       console.log(`End download video ${videoName}`.green);
       logger.write(`${videoName}\n`);
 
       progress(request(encodeURI(subtitleUrl)), { throttle: 2000, delay: 1000 })
-          .on('response', function (resp) {
-            if (parseInt(resp.statusCode) !== 404) {
-              this.pipe(fs.createWriteStream(`${downloadFolder}${path.sep}${videoName}.vtt`));
-            } else {
-              console.log('Subtitle does not exist');
-            }
-          })
-          .on('progress', function(state) {
-            writeWaitingInfo(state);
-          })
-          .on('error', function(err) {
-            console.log(`${err}`.red);
-            console.log('Subtitle does not exist');
-          })
-          .on('end', function() {
-            cleanLine();
-            console.log(`End download subtitle for ${videoName}`.green);
-          });
+        .on("response", function(resp) {
+          if (parseInt(resp.statusCode) !== 404) {
+            this.pipe(
+              fs.createWriteStream(
+                `${downloadFolder}${path.sep}${videoName}.vtt`
+              )
+            );
+          } else {
+            console.log("Subtitle does not exist");
+          }
+        })
+        .on("progress", function(state) {
+          writeWaitingInfo(state);
+        })
+        .on("error", function(err) {
+          console.log(`${err}`.red);
+          console.log("Subtitle does not exist");
+        })
+        .on("end", function() {
+          cleanLine();
+          console.log(`End download subtitle for ${videoName}`.green);
+        });
 
       nextVideo();
     })
