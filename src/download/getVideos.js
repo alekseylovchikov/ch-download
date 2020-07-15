@@ -22,7 +22,7 @@ function getVideos(url, token) {
         let $ = cheerio.load(html);
         let videoMaterials = $('.icon-download');
         let urlMaterials;
-        if (videoMaterials !== undefined && videoMaterials.length) {
+        if (videoMaterials !== undefined && videoMaterials.length > 1) {
           urlMaterials = videoMaterials[1].parent.attribs.href
         }
         $('#lessons-list').filter(function() {
