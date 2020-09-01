@@ -20,28 +20,21 @@ function getVideos(url, token) {
     request(options, function(err, res, html) {
       if (!err) {
         let $ = cheerio.load(html);
-        let videoMaterials = $('section.section-block');
+        let videoMaterials = $('.icon-download');
         let urlMaterials;
-        if (videoMaterials !== undefined && videoMaterials.length) {
-          let linkMaterials = videoMaterials.children().children().toArray();
-          if (linkMaterials.length) {
-            urlMaterials = linkMaterials.filter(
-                el => el.name === 'a'
-            );
-            if (urlMaterials !== undefined && urlMaterials.length) {
-              urlMaterials = urlMaterials[0].attribs.href;
-            }
-          }
+        if (videoMaterials !== undefined && videoMaterials.length > 1) {
+          urlMaterials = videoMaterials[1].parent.attribs.href
         }
         $('#lessons-list').filter(function() {
           let data = $(this);
           const dataArray = data
-            .children()
-            .children()
-            .toArray();
+              .children()
+              .children()
+              .toArray();
           const filterData = dataArray.filter(
-            el => el.name === 'link' && el.attribs.itemprop === 'contentUrl'
+              el => el.name === 'script' && el.attribs.type === 'application/ld+json'
           );
+          // console.log(filterData)
           const filterSpan = dataArray.filter(el => el.name === 'div' && el.attribs.class === 'lessons-name');
           filterSpan.map(el => {
             if (el.name === 'div') {
@@ -54,7 +47,9 @@ function getVideos(url, token) {
             }
           });
           filterData.map(el => {
-            result.push(el.attribs.href);
+            const data = JSON.parse(el.children[0].data)
+            const {contentUrl} = data
+            result.push(contentUrl);
           });
           resolve({ result, names, urlMaterials });
         });
