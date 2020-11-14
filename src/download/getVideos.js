@@ -21,7 +21,7 @@ const getLessonsData = $ => {
   });
 }
 
-const courseMaterialsAnchorSelector = '.course-wrap-bottom a[title="Download course materials"]'
+const courseMaterialsAnchorSelector = '.course-wrap-bottom .ml-15 a:nth-of-type(2)'
 const getCourseMaterialsUrl = $ => {
   const materialsAnchorEl = $(courseMaterialsAnchorSelector)
   return materialsAnchorEl.get()[0].attribs.href;
