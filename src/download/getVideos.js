@@ -6,58 +6,50 @@ request = request.defaults({
   jar: true
 });
 
-function getVideos(url, token) {
-  return new Promise(function(resolve, reject) {
-    let result = [];
-    let names = [];
-    const options = { url: url };
-    if (token) {
-      const cookie = request.cookie(token);
-      options.headers = {
-        Cookie: cookie
-      };
+const videoMaterialScriptContainerSelector = '.flex-player-item .main-content script:nth-of-type(2)';
+const getLessonsData = $ => {
+  const lessonsScriptContainer = $(videoMaterialScriptContainerSelector);
+  const lessonsScriptCode = lessonsScriptContainer.get()[0].children[0].data;
+  const coursesObjMatches = lessonsScriptCode.match(/({"title":)(.*)("})/g).slice(1);
+
+  return coursesObjMatches.map(courseString => {
+    const parsedCourseObj = JSON.parse(courseString);
+    return {
+      ...parsedCourseObj,
+      subtitle: parsedCourseObj.subtitle.replace(/(\[)(.*)(])/, '')
     }
+  });
+}
+
+const courseMaterialsAnchorSelector = '.course-wrap-bottom a[title="Download course materials"]'
+const getCourseMaterialsUrl = $ => {
+  const materialsAnchorEl = $(courseMaterialsAnchorSelector)
+  return materialsAnchorEl.get()[0].attribs.href;
+}
+
+function getVideos(url, token) {
+  const options = { url };
+  if (token) {
+    const cookie = request.cookie(token);
+    options.headers = {
+      Cookie: cookie
+    };
+  }
+  return new Promise((resolve, reject) => {
     request(options, function(err, res, html) {
       if (!err) {
         let $ = cheerio.load(html);
-        let videoMaterials = $('.icon-download');
-        let urlMaterials;
-        if (videoMaterials !== undefined && videoMaterials.length > 1) {
-          urlMaterials = videoMaterials[1].parent.attribs.href
-        }
-        $('#lessons-list').filter(function() {
-          let data = $(this);
-          const dataArray = data
-              .children()
-              .children()
-              .toArray();
-          const filterData = dataArray.filter(
-              el => el.name === 'script' && el.attribs.type === 'application/ld+json'
-          );
-          // console.log(filterData)
-          const filterSpan = dataArray.filter(el => el.name === 'div' && el.attribs.class === 'lessons-name');
-          filterSpan.map(el => {
-            if (el.name === 'div') {
-              const index = Number(el.parent.attribs['data-index']);
-              let videoName = 'Lesson ' + (index + 1);
-              if (el.children && el.children[0]) {
-                videoName = `${index + 1} ` + el.children[0].data.replace(/[\/:*?"<>|]/g, '');
-              }
-              names.push(videoName);
-            }
-          });
-          filterData.map(el => {
-            const data = JSON.parse(el.children[0].data)
-            const {contentUrl} = data
-            result.push(contentUrl);
-          });
-          resolve({ result, names, urlMaterials });
-        });
+        const lessonsData = getLessonsData($)
+        resolve({
+          result: lessonsData.map(lesson => lesson.file),
+          names: lessonsData.map(lesson => lesson.title.replace(/[\/:*?"<>|]/g, '')),
+          urlMaterials: getCourseMaterialsUrl($)
+        })
       } else {
-        reject(err);
+        reject(err)
       }
-    });
-  });
+    })
+  })
 }
 
 module.exports = getVideos;
