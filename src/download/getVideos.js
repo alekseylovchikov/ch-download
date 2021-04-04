@@ -72,9 +72,18 @@ function getVideos(url, token) {
             const lessonsData = JSON.parse(res.body);
             resolve({
               result: lessonsData.map((lesson) => lesson.file),
-              names: lessonsData.map((lesson) =>
-                lesson.title.replace(/\s\|\s\d{2}:\d{2}:\d{2}/g, "")
-              ),
+              names: lessonsData.map((lesson) => {
+                const str = lesson.title.replace(
+                  /\s\|\s\d{2}:\d{2}:\d{2}/g,
+                  ""
+                );
+                const match = str.match(/\d+\.\s.*/g);
+                if (match.length) {
+                  return match[0];
+                }
+
+                return str;
+              }),
               urlMaterials: getCourseMaterialsUrl($),
             });
           }
