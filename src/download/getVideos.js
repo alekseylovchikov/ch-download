@@ -78,7 +78,7 @@ function getVideos(url, token) {
                   ""
                 );
                 const match = str.match(/\d+\.\s.*/g);
-                if (match.length) {
+                if (match && match.length) {
                   return match[0];
                 }
 
