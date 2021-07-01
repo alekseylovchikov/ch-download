@@ -7,7 +7,7 @@ request = request.defaults({
 });
 
 const videoMaterialScriptContainerSelector =
-  ".flex-player-item .main-content script:nth-of-type(3)";
+  ".main-content script:nth-of-type(3)";
 
 const getCourseId = ($) => {
   const lessonsScriptContainer = $(videoMaterialScriptContainerSelector);
