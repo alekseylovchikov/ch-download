@@ -7,7 +7,7 @@ request = request.defaults({
 });
 
 const videoMaterialScriptContainerSelector =
-  ".main-content script:nth-of-type(3)";
+  ".main-content script:nth-of-type(2)";
 
 const getCourseId = ($) => {
   const lessonsScriptContainer = $(videoMaterialScriptContainerSelector);
@@ -15,10 +15,7 @@ const getCourseId = ($) => {
   if (lessonsScriptContainer.get().length) {
     const lessonsScriptCode = lessonsScriptContainer.get()[0].children[0].data;
 
-    const courseId = lessonsScriptCode
-      .replace(/\s/g, "")
-      .match(/axios.get\('\/course\/(\d+)\/lessons'\)/g)[0]
-      .match(/\d+/)[0];
+    const courseId = lessonsScriptCode.replace(/\s/g, "").match(/axios.get\('\/api\/v1\/course\/(\d+)\/lessons'\)/)[1];
 
     return courseId;
   } else {
@@ -57,7 +54,7 @@ function getVideos(url, token) {
         }
 
         const options = {
-          url: `https://coursehunter.net/course/${courseId}/lessons`,
+          url: `https://coursehunter.net/api/v1/course/${courseId}/lessons`
         };
 
         if (token) {
