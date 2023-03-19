@@ -1,3 +1,5 @@
+# DEPRECATED
+
 # Download videos (course) from coursehunter.net
 
 # How to install (Node.js and GIT required):
