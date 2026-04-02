@@ -1,8 +1,8 @@
-# DEPRECATED: This project is no longer maintained.
+# !!! DEPRECATED !!! This project is no longer maintained.
 
-# Download videos (course) from coursehunter.net
+## Download videos (course) from coursehunter.net
 
-# How to install (Node.js and GIT required):
+### How to install (Node.js and GIT required):
 
 ```sh
 ~ git clone https://github.com/alekseylovchikov/ch-download.git
