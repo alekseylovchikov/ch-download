@@ -15,7 +15,9 @@ const getCourseId = ($) => {
   if (lessonsScriptContainer.get().length) {
     const lessonsScriptCode = lessonsScriptContainer.get()[0].children[0].data;
 
-    const courseId = lessonsScriptCode.replace(/\s/g, "").match(/axios.get\('\/api\/v1\/course\/(\d+)\/lessons'\)/)[1];
+    const courseId = lessonsScriptCode
+      .replace(/\s/g, "")
+      .match(/\/api\/v1\/course\/(\d+)\/lessons/)[1];
 
     return courseId;
   } else {
