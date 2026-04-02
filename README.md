@@ -1,4 +1,4 @@
-# DEPRECATED
+# DEPRECATED: This project is no longer maintained.
 
 # Download videos (course) from coursehunter.net
 
